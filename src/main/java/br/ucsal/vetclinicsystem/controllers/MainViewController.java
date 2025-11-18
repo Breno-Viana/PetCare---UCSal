@@ -4,6 +4,7 @@ package br.ucsal.vetclinicsystem.controllers;
 import br.ucsal.vetclinicsystem.model.mock.Consulta;
 import br.ucsal.vetclinicsystem.model.mock.Mock;
 import br.ucsal.vetclinicsystem.utils.R;
+import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 
 public class MainViewController {
@@ -93,8 +95,8 @@ public class MainViewController {
             private final Button edit = new Button("Editar");
 
             {
-                edit.setPrefWidth(100); // ← Aumentar largura (era 80)
-                edit.setPrefHeight(28);
+                edit.setPrefWidth(110);
+                edit.setPrefHeight(30);
 
                 edit.setStyle(
                         "-fx-background-color: #6eafcc; " +
@@ -104,6 +106,10 @@ public class MainViewController {
                                 "-fx-border-radius: 5px; " +
                                 "-fx-background-radius: 5px;"
                 );
+
+                edit.setOnAction(e -> {
+                    animarBotao(edit);
+                });
             }
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -122,6 +128,22 @@ public class MainViewController {
         table.getColumns().add(column);
 
     }
+    private void animarBotao(Button btn) {
+        btn.setStyle("-fx-background-color: #5d899c;" +
+                "-fx-text-fill: #2fadbd");
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), btn);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(0.9);
+        scaleTransition.setToY(0.9);
+        scaleTransition.setCycleCount(2);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.play();
+        scaleTransition.setOnFinished(e -> {
+            btn.setStyle("-fx-background-color: #6eafcc; -fx-text-fill: white;");
+        });
+    }
+
 
 
     private void setFonts(){
