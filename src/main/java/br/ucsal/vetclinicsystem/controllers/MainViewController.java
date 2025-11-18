@@ -20,7 +20,7 @@ import javafx.scene.text.Font;
 
 public class MainViewController {
     private final String[] columnsName = {
-            "identificador",
+            "id da consulta",
             "animal",
             "veterinario responsavel",
             "data/hora",
@@ -65,6 +65,7 @@ public class MainViewController {
             TableColumn<Consulta, Integer> column = new TableColumn<>(columnsName[i]);
             column.prefWidthProperty().bind(table.widthProperty().multiply(0.12));
             column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
+            column.setStyle("-fx-alignment: CENTER;");
             column.setResizable(false);
             table.getColumns().add(column);
         }
@@ -72,6 +73,9 @@ public class MainViewController {
             TableColumn<Consulta, String> column = new TableColumn<>(columnsName[i]);
             column.prefWidthProperty().bind(table.widthProperty().multiply(0.12));
             column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
+            if (i == 6){
+                column.setStyle("-fx-alignment: CENTER;");
+            }
 
             column.setResizable(false);
             table.getColumns().add(column);
