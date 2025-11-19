@@ -13,17 +13,23 @@ import javafx.stage.Stage;
 //--------------------------
 public class AppMain extends Application {
 
+    //------------------------------
+    // STAGE PRINCIPAL DA APLICAÇÃO
+    //------------------------------
+    private final Stage principal_stage = new Stage();
+
     @Override
     public void start(Stage stage) throws Exception {
+
         FXMLLoader loader = new FXMLLoader(R.main_view);
 
         var scene = new Scene(loader.load());
-        stage.setScene(scene);
-        stage.setTitle("PetCare");
-        stage.setMinWidth(1500);
-        stage.setMinHeight(900);
-        stage.centerOnScreen();
-        stage.show();
+        principal_stage.setScene(scene);
+        principal_stage.setTitle("PetCare");
+        principal_stage.setMinWidth(1500);
+        principal_stage.setMinHeight(900);
+        principal_stage.centerOnScreen();
+        principal_stage.show();
     }
 
 

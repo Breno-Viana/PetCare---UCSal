@@ -1,81 +1,100 @@
 package br.ucsal.vetclinicsystem.controllers;
 
 
-import br.ucsal.vetclinicsystem.model.mock.Consulta;
+import br.ucsal.vetclinicsystem.model.entities.Consultation;
 import br.ucsal.vetclinicsystem.model.mock.Mock;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 public class MainViewController {
+
+
     private final String[] columnsName = {
             "id da consulta",
             "animal",
             "veterinario responsavel",
             "data/hora",
             "diagnostico",
-            "valor",
-            "cpf do dono"};
+            "valor"};
     private final String[] columnsValue = {
-            "consulId",
-            "animalId",
-            "vetelId",
-            "dataHora",
-            "diagnostico",
-            "valor",
-            "consultaPorCpf"
+            "id",
+            "animal",
+            "vet",
+            "dateTime",
+            "diagnosis",
+            "value",
     };
 
-    private final ObservableList<Consulta> list = FXCollections.observableList(Mock.consultas);
+    private final ObservableList<Consultation> list = FXCollections.observableList(Mock.consultations);
 
     @FXML
-    public ImageView logo;
+    private ImageView logo;
+    @FXML
+    private AnchorPane main;
+    @FXML
+    private TextField searchArea;
+    @FXML
+    private TableView<Consultation> table;
+    @FXML
+    private Label consult_label;
+    @FXML
+    private Button addBtn;
+    @FXML
+    private Button vetBtn;
+    @FXML
+    private Button aniBtn;
+    @FXML
+    private Button ownBtn;
+
 
     @FXML
-    public AnchorPane main;
-    @FXML
-    public TextField searchArea;
-    @FXML
-    public TableView<Consulta> table;
-    @FXML
-    public Label consult_label;
-
-    @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         loadColumns();
-        setFonts();
-        searchEvent();
+        setFontsAndStyles();
     }
 
     private void loadColumns() {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         table.setStyle("-fx-fixed-cell-size: 40px;");
-        for (int i = 0; i <3 ; i++) {
-            TableColumn<Consulta, Integer> column = new TableColumn<>(columnsName[i]);
+        {
+            TableColumn<Consultation, Integer> column = new TableColumn<>(columnsName[0]);
             column.prefWidthProperty().bind(table.widthProperty().multiply(0.12));
-            column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
-            column.setStyle("-fx-alignment: CENTER;");
+            column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[0]));
             column.setResizable(false);
             table.getColumns().add(column);
         }
-        for (int i = 3; i <7 ; i++) {
-            TableColumn<Consulta, String> column = new TableColumn<>(columnsName[i]);
-            column.prefWidthProperty().bind(table.widthProperty().multiply(0.12));
+
+        for (int i = 1; i < 6; i++) {
+            TableColumn<Consultation, String> column = new TableColumn<>(columnsName[i]);
+            column.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
             column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
-            if (i == 6){
+            if (i == 5 || i == 4) {
                 column.setStyle("-fx-alignment: CENTER;");
             }
 
@@ -87,9 +106,9 @@ public class MainViewController {
     }
 
     private void addEditButton() {
-        TableColumn<Consulta, Void> column = new TableColumn<>("Editar");
+        TableColumn<Consultation, Void> column = new TableColumn<>("Editar");
         column.setResizable(false);
-        column.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
+        column.prefWidthProperty().bind(table.widthProperty().multiply(0.13));
         column.setStyle("-fx-alignment: CENTER;");
         column.setCellFactory(fac -> new TableCell<>() {
             private final Button edit = new Button("Editar");
@@ -98,19 +117,13 @@ public class MainViewController {
                 edit.setPrefWidth(110);
                 edit.setPrefHeight(30);
 
-                edit.setStyle(
-                        "-fx-background-color: #6eafcc; " +
-                                "-fx-text-fill: white; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-cursor: hand; " +
-                                "-fx-border-radius: 5px; " +
-                                "-fx-background-radius: 5px;"
-                );
+                edit.setStyle(R.CSS_BEFORE_ANIMATE);
 
                 edit.setOnAction(e -> {
-                    animarBotao(edit);
+                    R.animateBtn(edit);
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -128,34 +141,85 @@ public class MainViewController {
         table.getColumns().add(column);
 
     }
-    private void animarBotao(Button btn) {
-        btn.setStyle("-fx-background-color: #5d899c;" +
-                "-fx-text-fill: #2fadbd");
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), btn);
-        scaleTransition.setFromX(1.0);
-        scaleTransition.setFromY(1.0);
-        scaleTransition.setToX(0.9);
-        scaleTransition.setToY(0.9);
-        scaleTransition.setCycleCount(2);
-        scaleTransition.setAutoReverse(true);
-        scaleTransition.play();
-        scaleTransition.setOnFinished(e -> {
-            btn.setStyle("-fx-background-color: #6eafcc; -fx-text-fill: white;");
-        });
+
+
+
+
+    private void setFontsAndStyles() throws IOException {
+        Font font_42 = Font.loadFont(R.principal_font.openStream(), 42);
+        consult_label.setFont(font_42);
+        addBtn.setStyle(R.CSS_BEFORE_ANIMATE);
+        addBtn.setText("Nova Consulta +");
+
+        vetBtn.setStyle(R.CSS_BEFORE_ANIMATE);
+        aniBtn.setStyle(R.CSS_BEFORE_ANIMATE);
+        ownBtn.setStyle(R.CSS_BEFORE_ANIMATE);
+        Tooltip ownToolTip = new Tooltip("Cadastrar Novo Proprietario");
+        ownBtn.setTooltip(ownToolTip);
+        Tooltip vetToolTip = new Tooltip("Cadastrar Novo Veterinario");
+        vetBtn.setTooltip(vetToolTip);
+        Tooltip aniToolTip = new Tooltip("Cadastrar Novo Animal");
+        aniBtn.setTooltip(aniToolTip);
+
     }
 
 
 
-    private void setFonts(){
-        Font font = Font.loadFont(R.principal_font, 42);
-        consult_label.setFont(font);
+    @FXML
+    void ownEvent(Event event) {
+        R.animateBtn(ownBtn);
+        eventoTeste();
     }
-    private void searchEvent() {
-        searchArea.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                System.out.println(searchArea.getText());
-            }
-        });
+
+    @FXML
+    void aniEvent(Event event) {
+        R.animateBtn(aniBtn);
+        eventoTeste();
+    }
+
+    @FXML
+    void vetEvent(Event event){
+        R.animateBtn(vetBtn);
+        eventoTeste();
+    }
+
+    @FXML
+    void consultEvent(Event event) throws IOException {
+        R.animateBtn(addBtn);
+        openConsultationRegisterView();
+    }
+
+    @FXML
+    void search(Event event){
+        var ev = (KeyEvent)event;
+        if (ev.getCode() == KeyCode.ENTER){
+            System.out.println(searchArea.getText());
+        }
+    }
+
+
+    void openConsultationRegisterView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(R.owner_view);
+        Parent root = loader.load();
+
+        var ownerController =(OwnerViewController) loader.getController();
+        Stage stage = new Stage();
+        stage.setTitle("Nova Consulta");
+        stage.setResizable(false);
+        stage.setScene(new Scene(root, 930, 600));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
+
+    void eventoTeste(){
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("ALERTA TESTE");
+        alert.setContentText("ALERTA DE TESTE");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        Optional<ButtonType> buttonType = alert.showAndWait();
+        if (buttonType.isPresent() && buttonType.get() == ButtonType.OK){
+            System.out.println("FUNCIONOU");
+        }
     }
 
 
