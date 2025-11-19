@@ -51,7 +51,7 @@ public class MainViewController {
             "value",
     };
 
-    private final ObservableList<Consultation> list = FXCollections.observableList(Mock.consultations);
+    private ObservableList<Consultation> list = FXCollections.observableList(Mock.consultations);
 
     @FXML
     private ImageView logo;
@@ -94,7 +94,7 @@ public class MainViewController {
             TableColumn<Consultation, String> column = new TableColumn<>(columnsName[i]);
             column.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
             column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
-            if (i == 5 || i == 4) {
+            if (i == 5 || i == 4 || i ==3) {
                 column.setStyle("-fx-alignment: CENTER;");
             }
 
@@ -199,16 +199,12 @@ public class MainViewController {
 
 
     void openConsultationRegisterView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(R.owner_view);
-        Parent root = loader.load();
-
-        var ownerController =(OwnerViewController) loader.getController();
-        Stage stage = new Stage();
-        stage.setTitle("Nova Consulta");
-        stage.setResizable(false);
-        stage.setScene(new Scene(root, 930, 600));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+        var controller = new OwnerViewController().open();
+        if (controller.isConfirmed()){
+            list = FXCollections.observableList(Mock.consultations);
+            table.getColumns().clear();
+            loadColumns();
+        }
     }
 
     void eventoTeste(){

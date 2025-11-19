@@ -29,6 +29,8 @@ public class Animal {
     public void setId(Long id) { this.id = id; }
 
     public String getOwner() { return owner.getName(); }
+
+    public Owner getOwnerO(){return owner;}
     public void setOwnerId(Owner owner) { this.owner = owner; }
 
     public String getName() { return name; }

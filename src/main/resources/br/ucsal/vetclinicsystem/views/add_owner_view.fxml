@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -13,12 +14,37 @@
     <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="816.0" AnchorPane.topAnchor="0.0">
         <Image url="@../img/petcare-logo.png" />
     </ImageView>
-    <Button fx:id="addBtn" layoutX="703.0" layoutY="507.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="200.0" text="Adicionar" AnchorPane.leftAnchor="703.0" AnchorPane.topAnchor="507.0" />
-    <Button fx:id="cancelBtn" layoutX="54.0" layoutY="507.0" maxWidth="210.0" mnemonicParsing="false" onAction="#cancel" prefHeight="50.0" prefWidth="210.0" text="Cancelar" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="507.0" />
-   <ChoiceBox fx:id="vetChoice" layoutX="233.0" layoutY="157.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0" AnchorPane.bottomAnchor="393.0" AnchorPane.leftAnchor="233.0" AnchorPane.rightAnchor="487.0" AnchorPane.topAnchor="157.0" />
-   <ChoiceBox fx:id="animaiChoice" layoutX="554.0" layoutY="157.0" prefHeight="50.0" prefWidth="210.0" AnchorPane.bottomAnchor="393.0" AnchorPane.leftAnchor="554.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="157.0" />
-   <TextField fx:id="diagText" layoutX="210.0" layoutY="300.0" prefHeight="38.0" prefWidth="255.0" promptText="Diagnostico" AnchorPane.bottomAnchor="262.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="465.0" AnchorPane.topAnchor="300.0" />
-   <TextField fx:id="valueText" layoutX="531.0" layoutY="300.0" prefHeight="38.0" prefWidth="255.0" promptText="Valor" />
-   <Label fx:id="consulLabel" layoutX="647.0" layoutY="14.0" prefHeight="62.0" prefWidth="263.0" text="CONSULTAS" textFill="#28487a"/>
+    <Button fx:id="addBtn" layoutX="703.0" layoutY="507.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="200.0" text="Adicionar" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="507.0" />
+    <Button fx:id="cancelBtn" layoutX="25.0" layoutY="507.0" maxWidth="210.0" mnemonicParsing="false" onAction="#cancel" prefHeight="50.0" prefWidth="210.0" text="Cancelar" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="700.0" AnchorPane.topAnchor="507.0" />
+   <ChoiceBox fx:id="vetChoice" layoutX="200.0" layoutY="157.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0" AnchorPane.bottomAnchor="393.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="570.0" AnchorPane.topAnchor="157.0" />
+   <ChoiceBox fx:id="animaiChoice" layoutX="150.0" layoutY="242.0" prefHeight="50.0" prefWidth="210.0" AnchorPane.bottomAnchor="308.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="570.0" AnchorPane.topAnchor="242.0" />
+   <TextField fx:id="diagText" layoutX="548.0" layoutY="242.0" prefHeight="38.0" prefWidth="255.0" promptText="Diagnostico" AnchorPane.bottomAnchor="320.0" AnchorPane.leftAnchor="548.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="242.0" />
+   <TextField fx:id="valueText" layoutX="548.0" layoutY="163.0" prefHeight="38.0" prefWidth="255.0" promptText="Valor" AnchorPane.bottomAnchor="399.0" AnchorPane.leftAnchor="548.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="163.0" />
+   <Label fx:id="consulLabel" layoutX="604.0" layoutY="14.0" prefHeight="62.0" prefWidth="313.0" text="Criar Consulta" textFill="#28487a">
+      <font>
+         <Font size="42.0" />
+      </font></Label>
+   <DatePicker fx:id="datePick" layoutX="139.0" layoutY="348.0" prefHeight="32.0" prefWidth="232.0" AnchorPane.bottomAnchor="220.0" AnchorPane.leftAnchor="139.0" AnchorPane.rightAnchor="559.0" AnchorPane.topAnchor="348.0" />
+   <Label layoutX="548.0" layoutY="131.0" prefHeight="23.0" prefWidth="68.0" text="Valor" textFill="#28487a">
+      <font>
+         <Font size="21.0" />
+      </font>
+   </Label>
+   <Label layoutX="548.0" layoutY="213.0" text="Diagnostico" textFill="#28487a">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Label>
+   <Label layoutX="139.0" layoutY="317.0" text="Data" textFill="#28487a">
+      <font>
+         <Font size="21.0" />
+      </font>
+   </Label>
+   <ChoiceBox fx:id="hour" layoutX="548.0" layoutY="329.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="232.0" />
+   <Label layoutX="548.0" layoutY="302.0" text="Horario" textFill="#28487a">
+      <font>
+         <Font size="21.0" />
+      </font>
+   </Label>
 
 </AnchorPane>
