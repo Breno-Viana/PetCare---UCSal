@@ -31,7 +31,7 @@ public class Animal {
     public String getOwner() { return owner.getName(); }
 
     public Owner getOwnerO(){return owner;}
-    public void setOwnerId(Owner owner) { this.owner = owner; }
+    public void setOwner(Owner owner) { this.owner = owner; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

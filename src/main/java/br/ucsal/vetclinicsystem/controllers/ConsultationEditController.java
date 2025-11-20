@@ -1,0 +1,182 @@
+package br.ucsal.vetclinicsystem.controllers;
+
+import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
+import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
+import br.ucsal.vetclinicsystem.model.entities.Animal;
+import br.ucsal.vetclinicsystem.model.entities.Consultation;
+import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
+import br.ucsal.vetclinicsystem.utils.R;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+public class ConsultationEditController extends ConsulteCommonAttributes {
+
+
+    public Button deleteBtn;
+    public Label diagLbl;
+    public Label valueLbl;
+    public Label dateLbl;
+    public Label aniLbl;
+    public Label vetLbl;
+    public Label hourLbl;
+    public Button updateBtn;
+    private long id;
+
+    private boolean closed = false;
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    private final ConsultationDAO dao = new ConsultationDAO();
+
+    private void setId(long id) {
+        this.id = id;
+        search();
+    }
+
+    @FXML
+    private Label editLabel;
+
+    @FXML
+    private void initialize() throws IOException {
+        setStylesAndFonts();
+    }
+
+    private void setStylesAndFonts() throws IOException {
+        Font font = Font.loadFont(R.principal_font.openStream(), 42);
+        Font font_20 = Font.loadFont(R.principal_font.openStream(), 20);
+        Font font_16 = Font.loadFont(R.principal_font.openStream(), 16);
+        editLabel.setFont(font);
+        deleteBtn.setFont(font_20);
+        deleteBtn.getStyleClass().add("delete-btn");
+        deleteBtn.setStyle(R.CSS_DELETE_BTN);
+        dateLbl.setFont(font_16);
+        valueLbl.setFont(font_16);
+        diagLbl.setFont(font_16);
+        vetLbl.setFont(font_16);
+        aniLbl.setFont(font_16);
+        hourLbl.setFont(font_16);
+        animaiChoice.setStyle(R.CSS_CHOICEBOX);
+        vetChoice.setStyle(R.CSS_CHOICEBOX);
+        hour.setStyle(R.CSS_CHOICEBOX);
+        updateBtn.setStyle(R.CSS_BEFORE_ANIMATE);
+        updateBtn.setFont(font_20);
+    }
+
+
+    private void search() {
+        initChoiceBox();
+        Consultation consultToEdit = dao.findById(id);
+        vetChoice.setValue(consultToEdit.getVetO());
+        animaiChoice.setValue(consultToEdit.getAnimalO());
+        animaiChoice.setConverter(new StringConverter<Animal>() {
+            public String toString(Animal animal) {
+                return animal == null ? "Animal para Consulta" : String.format("%s | %s", animal.getName(), animal.getOwner());
+            }
+
+            public Animal fromString(String s) {
+                return null;
+            }
+        });
+        var localTime = consultToEdit.getDateTime().toLocalTime();
+        var localDate = consultToEdit.getDateTime().toLocalDate();
+        datePick.setValue(localDate);
+        hour.setValue(localTime.toString());
+        diagText.setText(consultToEdit.getDiagnosis());
+        valueText.setText(consultToEdit.getValue().toString());
+
+    }
+
+    public ConsultationEditController openEdit(long id) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(R.consult_edit_view);
+        Parent root = fxmlLoader.load();
+        ConsultationEditController editController = fxmlLoader.getController();
+        editController.setId(id);
+        stage.setTitle("Editar Consulta");
+        stage.setResizable(false);
+        stage.setScene(new Scene(root, 990, 640));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        root.requestFocus();
+
+        stage.showAndWait();
+        return editController;
+    }
+
+    @FXML
+    void close(Event event) {
+        KeyEvent keyEvent = (KeyEvent) event;
+        if (keyEvent.getCode() == KeyCode.ESCAPE) {
+            var stage = (Stage) pane.getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    @FXML
+    void deleteConsulte(Event event) {
+        R.animateDeleteBtn(deleteBtn);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("DESEJA MESMO DELETAR ESSA CONSULTA?");
+        ButtonType yes = new ButtonType("SIM");
+        ButtonType not = new ButtonType("NÃO");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(not, yes);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setTitle("APAGAR CONSULTA");
+        alert.initOwner(pane.getScene().getWindow());
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.initStyle(StageStyle.UNDECORATED);
+        Optional<ButtonType> buttonType = alert.showAndWait();
+        if (buttonType.isPresent() && buttonType.get() == yes) {
+            dao.deleteById(id);
+            Alert confirm = new Alert(Alert.AlertType.NONE);
+            confirm.setTitle("Deletado");
+            confirm.setContentText("consulta de id " + id + " deletada");
+            confirm.getButtonTypes().clear();
+            confirm.initModality(Modality.APPLICATION_MODAL);
+            confirm.getButtonTypes().add(ButtonType.OK);
+            confirm.initStyle(StageStyle.UNDECORATED);
+            confirm.initOwner(pane.getScene().getWindow());
+            Optional<ButtonType> buttonType1 = confirm.showAndWait();
+            if (buttonType1.isPresent() && buttonType1.get() == ButtonType.OK) {
+                closed = true;
+                confirm.close();
+                var stage = (Stage) pane.getScene().getWindow();
+                stage.close();
+            }
+        }
+    }
+
+    private void initChoiceBox() {
+        vetChoice.setItems(veterinarians);
+        animaiChoice.setItems(animals);
+        hour.setItems(FXCollections.observableList(List.of(hours)));
+    }
+
+    @FXML
+    public void updateConsultation(ActionEvent actionEvent) {
+        R.animateBtn(updateBtn);
+    }
+}

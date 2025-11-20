@@ -8,13 +8,13 @@ public class Consultation {
     private Long id;
     private Animal animal;
     private Veterinarian vet;
-    private String dateTime;
+    private LocalDateTime dateTime;
     private String diagnosis;
     private BigDecimal value;
 
     public Consultation() {}
 
-    public Consultation(Long id, Animal animal, Veterinarian veterinarian, String dateTime,
+    public Consultation(Long id, Animal animal, Veterinarian veterinarian, LocalDateTime dateTime,
                         String diagnosis, BigDecimal value) {
 
         this.id = id;
@@ -34,12 +34,15 @@ public class Consultation {
     public String getVet() { return vet.getName(); }
     public void setVeterinarianId(Veterinarian vet) { this.vet = vet; }
 
-    public String getDateTime() { return dateTime; }
-    public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime.toString(); }
+    public LocalDateTime getDateTime() { return dateTime; }
+    public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime; }
 
     public String getDiagnosis() { return diagnosis; }
     public void setDiagnosis(String diagnosis) { this.diagnosis = diagnosis; }
 
     public BigDecimal getValue() { return value; }
     public void setValue(BigDecimal value) { this.value = value; }
+
+    public Animal getAnimalO(){return animal;}
+    public Veterinarian getVetO(){return vet;}
 }

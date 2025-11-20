@@ -1,20 +1,14 @@
 package br.ucsal.vetclinicsystem.controllers;
 
 
+import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
-import br.ucsal.vetclinicsystem.model.mock.Mock;
 import br.ucsal.vetclinicsystem.utils.R;
-import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-
-
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -23,17 +17,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
 public class MainViewController {
 
+    private final ConsultationDAO consultationDAO = new ConsultationDAO();
 
     private final String[] columnsName = {
             "id da consulta",
@@ -51,7 +42,7 @@ public class MainViewController {
             "value",
     };
 
-    private ObservableList<Consultation> list = FXCollections.observableList(Mock.consultations);
+    private ObservableList<Consultation> list = FXCollections.observableList(consultationDAO.findAll());
 
     @FXML
     private ImageView logo;
@@ -80,6 +71,8 @@ public class MainViewController {
     }
 
     private void loadColumns() {
+        list = FXCollections.observableList(consultationDAO.findAll());
+        table.getColumns().clear();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         table.setStyle("-fx-fixed-cell-size: 40px;");
         {
@@ -121,13 +114,22 @@ public class MainViewController {
 
                 edit.setOnAction(e -> {
                     R.animateBtn(edit);
+
+                    long id =  getTableView().getItems().get(getIndex()).getId();
+                    try {
+                        var controller = new ConsultationEditController().openEdit(id);
+                        if (controller.isClosed()){
+                            loadColumns();
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty) {
                     setGraphic(null);
                 } else {
@@ -199,10 +201,8 @@ public class MainViewController {
 
 
     void openConsultationRegisterView() throws IOException {
-        var controller = new OwnerViewController().open();
+        var controller = new ConsultationRegisterController().openRegister();
         if (controller.isConfirmed()){
-            list = FXCollections.observableList(Mock.consultations);
-            table.getColumns().clear();
             loadColumns();
         }
     }

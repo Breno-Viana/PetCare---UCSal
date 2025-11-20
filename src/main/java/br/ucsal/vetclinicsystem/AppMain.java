@@ -8,14 +8,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 
-//--------------------------
-// CLASSE QUE INICIA O SISTEMA
-//--------------------------
 public class AppMain extends Application {
 
-    //------------------------------
-    // STAGE PRINCIPAL DA APLICAÇÃO
-    //------------------------------
     private final Stage principal_stage = new Stage();
 
     @Override

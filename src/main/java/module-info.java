@@ -8,7 +8,7 @@ module br.ucsal.vetclinicsystem {
 
     opens br.ucsal.vetclinicsystem to javafx.fxml;
     opens br.ucsal.vetclinicsystem.controllers to javafx.fxml;
-    opens br.ucsal.vetclinicsystem.model.mock to javafx.base;
+    opens br.ucsal.vetclinicsystem.controllers.common to javafx.fxml;
     exports br.ucsal.vetclinicsystem;
     opens br.ucsal.vetclinicsystem.model.entities to javafx.base;
 }
