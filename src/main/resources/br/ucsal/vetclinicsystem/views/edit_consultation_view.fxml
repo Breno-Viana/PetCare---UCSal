@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#close" prefHeight="630.0" prefWidth="990.0" style="-fx-background-color: #758f8d;;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ucsal.vetclinicsystem.controllers.ConsultationEditController">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#close" prefHeight="630.0" prefWidth="990.0" style="-fx-background-color: #758f8d;;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ucsal.vetclinicsystem.controllers.consultations.ConsultationEditController">
     <ImageView fitHeight="300.0" fitWidth="250.0" layoutX="-13.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="396.0" AnchorPane.leftAnchor="-13.0" AnchorPane.rightAnchor="753.0" AnchorPane.topAnchor="-16.0">
         <Image url="@../img/petcare-logo.png" />
     </ImageView>

@@ -28,7 +28,7 @@
             <RowConstraints maxHeight="286.66668701171875" minHeight="10.0" prefHeight="59.33331298828125" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="532.6666870117188" minHeight="10.0" prefHeight="532.6666870117188" vgrow="SOMETIMES" />
         </rowConstraints>
-        <TextField fx:id="searchArea" alignment="BOTTOM_LEFT" onKeyPressed="#search" focusTraversable="false" maxHeight="45.0" maxWidth="500.0" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="450.0" promptText="Pesquisar" style="-fx-background-color: transparent; -fx-border-width: 0 0 2.2 0; -fx-border-color: #28487a;" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+        <TextField fx:id="searchArea" alignment="BOTTOM_LEFT" focusTraversable="false" maxHeight="45.0" maxWidth="500.0" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" onKeyPressed="#search" prefHeight="40.0" prefWidth="450.0" promptText="Pesquisar Por Cpf Do Dono" style="-fx-background-color: transparent; -fx-border-width: 0 0 2.2 0; -fx-border-color: #28487a;" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
            <font>
                <Font size="18.0" />
            </font>
@@ -39,7 +39,7 @@
             <Insets bottom="10.0" top="5.0" />
          </GridPane.margin>
         </TextField>
-        <Label fx:id="consult_label" alignment="BOTTOM_LEFT" prefHeight="60.0" prefWidth="349.0"  text="CONSULTAS" textFill="#28487a" wrapText="true" GridPane.valignment="BOTTOM">
+        <Label fx:id="consult_label" alignment="BOTTOM_LEFT" prefHeight="60.0" prefWidth="349.0" text="CONSULTAS" textFill="#28487a" wrapText="true" GridPane.valignment="BOTTOM">
            <GridPane.margin>
                <Insets left="20.0" />
            </GridPane.margin>
@@ -60,17 +60,17 @@
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-        <Button fx:id="aniBtn" mnemonicParsing="false" onAction="#aniEvent" prefHeight="50.0" prefWidth="200.0" text="Cadastrar Animal +" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+        <Button fx:id="aniBtn" mnemonicParsing="false" onAction="#loadAnimalArea" prefHeight="50.0" prefWidth="200.0" text="Area Animal" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
            <GridPane.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
            </GridPane.margin>
         </Button>
-        <Button fx:id="vetBtn" mnemonicParsing="false" onAction="#vetEvent" prefHeight="50.0" prefWidth="200.0" text="Cadastrar Veterinario +" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+        <Button fx:id="vetBtn" mnemonicParsing="false" onAction="#loadVeterinariaArea" prefHeight="50.0" prefWidth="200.0" text="Area Veterinario" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
            <GridPane.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
            </GridPane.margin>
         </Button>
-        <Button fx:id="ownBtn" mnemonicParsing="false" onAction="#ownEvent" prefHeight="50.0" prefWidth="200.0" text="Cadastrar Propretario +" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+        <Button fx:id="ownBtn" mnemonicParsing="false" onAction="#loadOwnerArea" prefHeight="50.0" prefWidth="200.0" text="Area Proprietario" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
            <GridPane.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
            </GridPane.margin>

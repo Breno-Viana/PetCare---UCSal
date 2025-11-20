@@ -1,15 +1,12 @@
-package br.ucsal.vetclinicsystem.controllers;
+package br.ucsal.vetclinicsystem.controllers.consultations;
 
 import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
-import br.ucsal.vetclinicsystem.model.dao.AnimalDAO;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
-import br.ucsal.vetclinicsystem.model.dao.VeterinarianDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
 import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -107,13 +103,12 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
         String text1 = diagText.getText();
         LocalDate value = datePick.getValue();
         String hourValue = hour.getValue();
-        if (animal == null || vet == null || text.isBlank()||!text.matches(regex)||text1.isBlank()||value.isBefore(LocalDate.now())||hourValue.isBlank()){
-            warning();
-            return;}
 
+        if (!validate(animal, vet, text, text1, value, hourValue)) return;
+        String replace = text.replace(",", ".");
         LocalTime time = LocalTime.parse(hourValue);
         LocalDateTime dateTime = LocalDateTime.of(value, time);
-        var consult = new Consultation(null, animal, vet,dateTime, text1, new BigDecimal(text));
+        var consult = new Consultation(null, animal, vet,dateTime, text1, new BigDecimal(replace));
         new ConsultationDAO().save(consult);
         confirmed = true;
         Stage stage = (Stage) addBtn.getScene().getWindow();
@@ -141,14 +136,7 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
     }
 
 
-    private void warning(){
-        var warningAlert = new Alert(Alert.AlertType.WARNING);
-        warningAlert.setResizable(false);
-        warningAlert.setTitle("SOLICITAÇÃO INVÁLIDA");
-        warningAlert.initModality(Modality.APPLICATION_MODAL);
-        warningAlert.setContentText("INSIRA VALORES VALIDOS E OS CAMPOS OBRIGATÓRIOS");
-        warningAlert.showAndWait();
-    }
+
 
     @FXML
     void close(Event event){

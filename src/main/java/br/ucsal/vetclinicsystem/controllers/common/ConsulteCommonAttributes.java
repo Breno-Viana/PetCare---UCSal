@@ -7,17 +7,30 @@ import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+
+import java.time.LocalDate;
 
 public abstract class ConsulteCommonAttributes {
-    protected final String regex = "^\\d+(,\\d{0,2})?$";
+    protected final String regex = "^(0|[1-9]\\d*)([.,]\\d{1,2})?$";
+;
 
     @FXML
     protected AnchorPane pane;
 
+    private final String[] errors = {
+            "ESCOLHA UM VETERINÁRIO VÁLIDO",
+            "ESCOLHA UM ANIMAL VÁLIDO",
+            "ESCOLHA UM HORÁRIO VÁLIDO",
+            "ESCOLHA UM DATA VÁLIDA",
+            "INSIRA UM DIAGNOSTICO VÁLIDO",
+            "INSIRA UM VALOR VÁLIDO"
+    };
     protected String[] hours = {
             "08:00",
             "09:00",
@@ -47,4 +60,42 @@ public abstract class ConsulteCommonAttributes {
     protected TextField diagText;
     @FXML
     protected TextField valueText;
+
+    private void warning(String msg) {
+        var warningAlert = new Alert(Alert.AlertType.WARNING);
+        warningAlert.setResizable(false);
+        warningAlert.setTitle("SOLICITAÇÃO INVÁLIDA");
+        warningAlert.initModality(Modality.APPLICATION_MODAL);
+        warningAlert.setContentText(msg);
+        warningAlert.showAndWait();
+    }
+
+    public boolean validate(Animal animal, Veterinarian vet, String value, String diagnosis, LocalDate date, String hourValue) {
+        if (animal == null) {
+            warning(errors[1]);
+            return false;
+        }
+        if (vet == null){
+            warning(errors[0]);
+            return false;
+        }
+        if (hourValue == null || hourValue.isBlank()){
+            warning(errors[2]);
+            return false;
+        }
+        if (value == null || value.isBlank() || !value.matches(regex)){
+            warning(errors[5]);
+            return false;
+        }
+        if (date == null){
+            warning(errors[3]);
+            return false;
+        }
+        if (diagnosis == null||diagnosis.isBlank()){
+            warning(errors[4]);
+            return false;
+        }
+
+        return true;
+    }
 }

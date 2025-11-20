@@ -11,4 +11,5 @@ module br.ucsal.vetclinicsystem {
     opens br.ucsal.vetclinicsystem.controllers.common to javafx.fxml;
     exports br.ucsal.vetclinicsystem;
     opens br.ucsal.vetclinicsystem.model.entities to javafx.base;
+    opens br.ucsal.vetclinicsystem.controllers.consultations to javafx.fxml;
 }

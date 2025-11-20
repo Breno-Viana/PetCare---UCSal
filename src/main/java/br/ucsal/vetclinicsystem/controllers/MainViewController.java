@@ -1,6 +1,8 @@
 package br.ucsal.vetclinicsystem.controllers;
 
 
+import br.ucsal.vetclinicsystem.controllers.consultations.ConsultationEditController;
+import br.ucsal.vetclinicsystem.controllers.consultations.ConsultationRegisterController;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
 import br.ucsal.vetclinicsystem.utils.R;
@@ -17,8 +19,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 
@@ -71,7 +75,7 @@ public class MainViewController {
     }
 
     private void loadColumns() {
-        list = FXCollections.observableList(consultationDAO.findAll());
+//        list = FXCollections.observableList(consultationDAO.findAll());
         table.getColumns().clear();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         table.setStyle("-fx-fixed-cell-size: 40px;");
@@ -87,7 +91,7 @@ public class MainViewController {
             TableColumn<Consultation, String> column = new TableColumn<>(columnsName[i]);
             column.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
             column.setCellValueFactory(new PropertyValueFactory<>(columnsValue[i]));
-            if (i == 5 || i == 4 || i ==3) {
+            if (i == 5 || i == 4 || i == 3) {
                 column.setStyle("-fx-alignment: CENTER;");
             }
 
@@ -115,10 +119,11 @@ public class MainViewController {
                 edit.setOnAction(e -> {
                     R.animateBtn(edit);
 
-                    long id =  getTableView().getItems().get(getIndex()).getId();
+                    long id = getTableView().getItems().get(getIndex()).getId();
                     try {
                         var controller = new ConsultationEditController().openEdit(id);
-                        if (controller.isClosed()){
+                        if (controller.isClosed()) {
+                            list = FXCollections.observableList(consultationDAO.findAll());
                             loadColumns();
                         }
                     } catch (IOException ex) {
@@ -145,8 +150,6 @@ public class MainViewController {
     }
 
 
-
-
     private void setFontsAndStyles() throws IOException {
         Font font_42 = Font.loadFont(R.principal_font.openStream(), 42);
         consult_label.setFont(font_42);
@@ -156,34 +159,17 @@ public class MainViewController {
         vetBtn.setStyle(R.CSS_BEFORE_ANIMATE);
         aniBtn.setStyle(R.CSS_BEFORE_ANIMATE);
         ownBtn.setStyle(R.CSS_BEFORE_ANIMATE);
-        Tooltip ownToolTip = new Tooltip("Cadastrar Novo Proprietario");
+        Tooltip ownToolTip = new Tooltip("Ir para área do proprietário");
         ownBtn.setTooltip(ownToolTip);
-        Tooltip vetToolTip = new Tooltip("Cadastrar Novo Veterinario");
+        Tooltip vetToolTip = new Tooltip("Ir para área do veterinário");
         vetBtn.setTooltip(vetToolTip);
-        Tooltip aniToolTip = new Tooltip("Cadastrar Novo Animal");
+        Tooltip aniToolTip = new Tooltip("Ir para área do animal");
         aniBtn.setTooltip(aniToolTip);
 
     }
 
 
 
-    @FXML
-    void ownEvent(Event event) {
-        R.animateBtn(ownBtn);
-        eventoTeste();
-    }
-
-    @FXML
-    void aniEvent(Event event) {
-        R.animateBtn(aniBtn);
-        eventoTeste();
-    }
-
-    @FXML
-    void vetEvent(Event event){
-        R.animateBtn(vetBtn);
-        eventoTeste();
-    }
 
     @FXML
     void consultEvent(Event event) throws IOException {
@@ -192,30 +178,74 @@ public class MainViewController {
     }
 
     @FXML
-    void search(Event event){
-        var ev = (KeyEvent)event;
-        if (ev.getCode() == KeyCode.ENTER){
-            System.out.println(searchArea.getText());
+    void search(Event event) throws SQLException {
+        var ev = (KeyEvent) event;
+        if (ev.getCode() == KeyCode.ENTER) {
+            if (validEntry()) {
+                list = FXCollections.observableList(consultationDAO.findByOwnerCpf(searchArea.getText()));
+                loadColumns();
+            }else {
+                list = FXCollections.observableList(consultationDAO.findAll());
+                loadColumns();
+                if (searchArea.getText().isBlank()) return;
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("DIGITE O CPF COMPLETO E SOMENTE OS NUMEROS");
+                alert.setTitle("CPF INVÁLIDO");
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.initStyle(StageStyle.UNDECORATED);
+                alert.show();
+            }
         }
+    }
+
+    private boolean validEntry() {
+        String text = searchArea.getText();
+        String[] split = text.split("");
+        if (split.length == 11){
+            for (String s : split) {
+                try {
+                    Integer.parseInt(s);
+                } catch (RuntimeException r) {
+                    return false;
+                }
+            }
+            return true;
+        }else return false;
     }
 
 
     void openConsultationRegisterView() throws IOException {
         var controller = new ConsultationRegisterController().openRegister();
-        if (controller.isConfirmed()){
+        if (controller.isConfirmed()) {
+            list = FXCollections.observableList(consultationDAO.findAll());
             loadColumns();
         }
     }
 
-    void eventoTeste(){
+    void eventoTeste() {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("ALERTA TESTE");
         alert.setContentText("ALERTA DE TESTE");
         alert.initModality(Modality.APPLICATION_MODAL);
         Optional<ButtonType> buttonType = alert.showAndWait();
-        if (buttonType.isPresent() && buttonType.get() == ButtonType.OK){
+        if (buttonType.isPresent() && buttonType.get() == ButtonType.OK) {
             System.out.println("FUNCIONOU");
         }
+    }
+
+    @FXML
+    void loadVeterinariaArea(Event event){
+        R.animateBtn(vetBtn);
+    }
+
+    @FXML
+    void loadOwnerArea(Event event){
+        R.animateBtn(ownBtn);
+    }
+
+    @FXML
+    void loadAnimalArea(Event event){
+        R.animateBtn(aniBtn);
     }
 
 

@@ -1,10 +1,9 @@
-package br.ucsal.vetclinicsystem.controllers;
+package br.ucsal.vetclinicsystem.controllers.consultations;
 
 import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
-import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -26,7 +25,11 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +45,6 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
     public Label hourLbl;
     public Button updateBtn;
     private long id;
-
     private boolean closed = false;
 
     public boolean isClosed() {
@@ -176,7 +178,33 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
     }
 
     @FXML
-    public void updateConsultation(ActionEvent actionEvent) {
+    public void updateConsultation(ActionEvent actionEvent) throws SQLException {
         R.animateBtn(updateBtn);
+        LocalTime time = LocalTime.parse(hour.getValue());
+        LocalDate date = datePick.getValue();
+        if (!validate(animaiChoice.getValue(),vetChoice.getValue(),valueText.getText(),diagText.getText(), datePick.getValue(),hour.getValue())){
+            return;
+        }
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+        String replace = valueText.getText().replace(",", ".");
+        Consultation consultation = new Consultation(id, animaiChoice.getValue(), vetChoice.getValue(), dateTime, diagText.getText(), new BigDecimal(replace));
+
+        Alert updating = new Alert(Alert.AlertType.CONFIRMATION);
+        updating.setTitle("ATUALIZAR CONSULTA");
+        updating.setResizable(false);
+        updating.setContentText("ATUALIZAR CONSULTA "+consultation.getId()+"?");
+        updating.getButtonTypes().clear();
+        updating.initStyle(StageStyle.UNDECORATED);
+        ButtonType yes = new ButtonType("Sim");
+        ButtonType not = new ButtonType("Não");
+        updating.getButtonTypes().addAll(not, yes);
+        Optional<ButtonType> buttonType = updating.showAndWait();
+        if (buttonType.isPresent() && buttonType.get() == yes){
+            var stage = (Stage)pane.getScene().getWindow();
+            dao.update(consultation);
+            stage.close();
+            closed = true;
+        }
+
     }
 }
