@@ -1,8 +1,8 @@
 package br.ucsal.vetclinicsystem.controllers;
 
 
-import br.ucsal.vetclinicsystem.controllers.consultations.ConsultationEditController;
-import br.ucsal.vetclinicsystem.controllers.consultations.ConsultationRegisterController;
+import br.ucsal.vetclinicsystem.controllers.modal.consultations.ConsultationEditController;
+import br.ucsal.vetclinicsystem.controllers.modal.consultations.ConsultationRegisterController;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
 import br.ucsal.vetclinicsystem.utils.R;
@@ -10,7 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -19,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -169,8 +172,6 @@ public class MainViewController {
     }
 
 
-
-
     @FXML
     void consultEvent(Event event) throws IOException {
         R.animateBtn(addBtn);
@@ -184,7 +185,7 @@ public class MainViewController {
             if (validEntry()) {
                 list = FXCollections.observableList(consultationDAO.findByOwnerCpf(searchArea.getText()));
                 loadColumns();
-            }else {
+            } else {
                 list = FXCollections.observableList(consultationDAO.findAll());
                 loadColumns();
                 if (searchArea.getText().isBlank()) return;
@@ -201,7 +202,7 @@ public class MainViewController {
     private boolean validEntry() {
         String text = searchArea.getText();
         String[] split = text.split("");
-        if (split.length == 11){
+        if (split.length == 11) {
             for (String s : split) {
                 try {
                     Integer.parseInt(s);
@@ -210,7 +211,7 @@ public class MainViewController {
                 }
             }
             return true;
-        }else return false;
+        } else return false;
     }
 
 
@@ -222,29 +223,38 @@ public class MainViewController {
         }
     }
 
-    void eventoTeste() {
-        var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("ALERTA TESTE");
-        alert.setContentText("ALERTA DE TESTE");
-        alert.initModality(Modality.APPLICATION_MODAL);
-        Optional<ButtonType> buttonType = alert.showAndWait();
-        if (buttonType.isPresent() && buttonType.get() == ButtonType.OK) {
-            System.out.println("FUNCIONOU");
+
+    @FXML
+    void loadOwnerArea(Event event) throws IOException {
+        R.animateBtn(ownBtn);
+        var stage = (Stage) vetBtn.getScene().getWindow();
+
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        double y = stage.getY();
+        double x = stage.getX();
+
+        FXMLLoader loader = new FXMLLoader(R.veterinarian_view);
+        boolean maximized = stage.isMaximized();
+
+        if (maximized){
+            stage.setMaximized(true);
+        }else {
+            stage.setMinWidth(width);
+            stage.setHeight(height);
+            stage.setX(x);
+            stage.setY(y);
         }
+        stage.setScene(new Scene(loader.load()));
     }
 
     @FXML
-    void loadVeterinariaArea(Event event){
+    void loadVeterinariaArea(Event event) {
         R.animateBtn(vetBtn);
     }
 
     @FXML
-    void loadOwnerArea(Event event){
-        R.animateBtn(ownBtn);
-    }
-
-    @FXML
-    void loadAnimalArea(Event event){
+    void loadAnimalArea(Event event) {
         R.animateBtn(aniBtn);
     }
 

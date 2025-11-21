@@ -2,10 +2,10 @@ package br.ucsal.vetclinicsystem.model.entities;
 
 public class Address {
 
-    private Long ownerId;   // same as Owner.id (PK=FK)
+    private Long ownerId;
     private String street;
     private String city;
-    private String state; // UF
+    private String state;
 
     public Address() {}
 

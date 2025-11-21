@@ -22,7 +22,7 @@ public class AppMain extends Application {
         principal_stage.setTitle("PetCare");
         principal_stage.setMinWidth(1500);
         principal_stage.setMinHeight(900);
-        principal_stage.centerOnScreen();
+//        principal_stage.centerOnScreen();
         principal_stage.show();
     }
 

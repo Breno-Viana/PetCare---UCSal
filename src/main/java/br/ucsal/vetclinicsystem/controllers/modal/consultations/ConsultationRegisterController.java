@@ -1,4 +1,4 @@
-package br.ucsal.vetclinicsystem.controllers.consultations;
+package br.ucsal.vetclinicsystem.controllers.modal.consultations;
 
 import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;

@@ -8,14 +8,17 @@ public class Owner {
     private String email;
     private String phone;
 
+    private Address address;
+
     public Owner() {}
 
-    public Owner(Long id, String cpf, String name, String email, String phone) {
+    public Owner(Long id, String cpf, String name, String email, String phone, Address address) {
         this.id = id;
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.address = address;
     }
 
     public Long getId() { return id; }
@@ -32,4 +35,11 @@ public class Owner {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    public Address getAddress(){
+        return address;
+    }
 }
