@@ -141,4 +141,16 @@ public class ConsultationDAO  {
         
     }
 
+    public void deleteByAnimalId(Long id) throws SQLException {
+        var sql = """
+                delete from consultas where animal_id = ?;
+                """;
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        }catch (SQLException e){
+            throw new SQLException(e);
+        }
+    }
+
 }

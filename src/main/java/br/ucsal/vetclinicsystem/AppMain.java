@@ -10,10 +10,8 @@ import javafx.stage.Stage;
 
 public class AppMain extends Application {
 
-    private final Stage principal_stage = new Stage();
-
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage principal_stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(R.main_view);
 
@@ -22,7 +20,7 @@ public class AppMain extends Application {
         principal_stage.setTitle("PetCare");
         principal_stage.setMinWidth(1500);
         principal_stage.setMinHeight(900);
-//        principal_stage.centerOnScreen();
+        principal_stage.setMaximized(true);
         principal_stage.show();
     }
 

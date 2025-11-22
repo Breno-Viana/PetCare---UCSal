@@ -10,6 +10,10 @@ public class Owner {
 
     private Address address;
 
+    private String street;
+
+    private String num;
+
     public Owner() {}
 
     public Owner(Long id, String cpf, String name, String email, String phone, Address address) {
@@ -19,6 +23,10 @@ public class Owner {
         this.email = email;
         this.phone = phone;
         this.address = address;
+        String street1 = address.getStreet();
+        String[] split = street1.split(",");
+        this.street = split[0];
+        this.num = split[1];
     }
 
     public Long getId() { return id; }
@@ -41,5 +49,19 @@ public class Owner {
     }
     public Address getAddress(){
         return address;
+    }
+
+    public String getState(){
+        return address.getState();
+    }
+    public String getCity(){
+        return address.getCity();
+    }
+
+    public String getStreet(){
+        return street;
+    }
+    public String getNum(){
+        return num;
     }
 }

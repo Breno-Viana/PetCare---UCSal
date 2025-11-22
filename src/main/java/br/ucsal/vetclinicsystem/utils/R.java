@@ -18,15 +18,16 @@ public class R {
     public static final URL consult_add_view;
     public static final URL consult_edit_view;
     public static final URL veterinarian_view;
-
+    public static final  URL edit_owner_view;
 
     static {
+        edit_owner_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_owner_view.fxml"));
         principal_font = Objects.requireNonNull(AppMain.class.getResource("fonts/principal_bold.otf"));
         logo = new Image((Objects.requireNonNull(AppMain.class.getResource("img/petcare-logo.png")).toExternalForm()));
         main_view = Objects.requireNonNull(AppMain.class.getResource("views/main.fxml"));
         consult_add_view = Objects.requireNonNull(AppMain.class.getResource("views/add_consultation_view.fxml"));
         consult_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_consultation_view.fxml"));
-        veterinarian_view = Objects.requireNonNull(AppMain.class.getResource("views/veterinarian_view.fxml"));
+        veterinarian_view = Objects.requireNonNull(AppMain.class.getResource("views/owner_view.fxml"));
     }
     public static final String CSS_DELETE_BTN =
             "-fx-background-color: #e74c3c;" +
@@ -55,8 +56,12 @@ public class R {
 
 
     public static void animateBtn(Button btn) {
-        btn.setStyle("-fx-background-color: #5d899c;" +
-                "-fx-text-fill: #2fadbd");
+        btn.setStyle("-fx-background-color: #1d3440; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-cursor: hand; " +
+                "-fx-border-radius: 5px; " +
+                "-fx-background-radius: 5px;");
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(90), btn);
         scaleTransition.setFromX(1.0);
         scaleTransition.setFromY(1.0);

@@ -3,10 +3,8 @@ package br.ucsal.vetclinicsystem.model.dao;
 import br.ucsal.vetclinicsystem.config.PostgresConnectionConfig;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +57,62 @@ public class AnimalDAO {
             }
         }catch (SQLException e){
             throw new RuntimeException();
+        }
+        return list;
+    }
+
+    public void deleteByOwnerId(Long id) throws SQLException {
+        var sql = """
+                delete from animais where proprietario_id = ?;
+                """;
+
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+//            new ConsultationDAO().deleteByAnimalId();
+        }catch (SQLException e){
+            throw new SQLException(e);
+        }
+    }
+
+    private List<Animal> findByOwnerId(Long id) throws SQLException {
+        var list = new ArrayList<Animal>();
+        var sql = """
+                select * from animais where proprietario_id = ?;
+                """;
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                String name = resultSet.getString("nome");
+                String breed = resultSet.getString("raca");
+                String species = resultSet.getString("especie");
+                float weight= resultSet.getFloat("peso");
+                var owner = new OwnerDAO().findById(id);
+                Date birth = resultSet.getDate("data_nascimento");
+                long id1 = resultSet.getLong("id");
+                list.add(new Animal(id,owner, name, species, breed, LocalDate.parse(birth.toString()), weight));
+
+            }
+        }catch (SQLException e){
+            throw new SQLException(e);
+        }
+        return list;
+    }
+    public List<Long> findAnimalIdByOwnerId(long id) throws SQLException {
+        var sql = """
+                select id from animais where proprietario_id = ?;
+                """;
+        var list = new ArrayList<Long>();
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                list.add(resultSet.getLong("id"));
+            }
+        }catch (SQLException e){
+            throw new SQLException(e);
         }
         return list;
     }
