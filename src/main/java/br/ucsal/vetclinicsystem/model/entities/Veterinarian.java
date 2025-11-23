@@ -5,7 +5,7 @@ public class Veterinarian {
     private Long id;
     private String crmv;
     private String name;
-    private String specialty;
+    private String speciality;
     private String phone;
 
     public Veterinarian() {}
@@ -14,7 +14,7 @@ public class Veterinarian {
         this.id = id;
         this.crmv = crmv;
         this.name = name;
-        this.specialty = specialty;
+        this.speciality = specialty;
         this.phone = phone;
     }
 
@@ -27,8 +27,8 @@ public class Veterinarian {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getSpecialty() { return specialty; }
-    public void setSpecialty(String specialty) { this.specialty = specialty; }
+    public String getSpeciality() { return speciality; }
+    public void setSpeciality(String specialty) { this.speciality = specialty; }
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }

@@ -4,6 +4,7 @@ import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
+import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -99,6 +100,18 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
             }
 
             public Animal fromString(String s) {
+                return null;
+            }
+        });
+        vetChoice.setConverter(new StringConverter<Veterinarian>() {
+
+            @Override
+            public String toString(Veterinarian vet) {
+                return vet == null ? "Selecione um veterinário" : String.format("%s | %s", vet.getName(), vet.getSpeciality());
+            }
+
+            @Override
+            public Veterinarian fromString(String s) {
                 return null;
             }
         });

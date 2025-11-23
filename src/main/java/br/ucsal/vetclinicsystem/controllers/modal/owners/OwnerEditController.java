@@ -95,7 +95,7 @@ public class OwnerEditController extends OwnerCommonAttributes {
         String city = cityInput.getText();
         String street = streetInput.getText();
         String num = numInput.getText().trim();
-        if (!validate(name, cpf, email, phone, state, street, city, num)){
+        if (!validate(id,name, cpf, email, phone, state, street, city, num)){
             return;
         }
         var streetNum = String.format("%s,%s", street, num.trim());

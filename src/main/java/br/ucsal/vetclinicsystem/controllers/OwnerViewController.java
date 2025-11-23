@@ -259,7 +259,7 @@ public class OwnerViewController extends OwnerCommonAttributes {
         String city = cityInput.getText();
         String street = streetInput.getText();
         String num = numInput.getText();
-        if (!validate(name, cpf, email, phone, state, street, city, num)){
+        if (!validate(null, name, cpf, email, phone, state, street, city, num)){
             return;
         }
         var streetNum = String.format("%s,%s", street, num.trim());
@@ -276,6 +276,7 @@ public class OwnerViewController extends OwnerCommonAttributes {
         owners = FXCollections.observableList(dao.findAll());
         loadColumns();
     }
+
 
 
 }

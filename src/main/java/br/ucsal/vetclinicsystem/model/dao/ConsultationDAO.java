@@ -125,13 +125,13 @@ public class ConsultationDAO  {
             statement.setString(1, cpf);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                long id1 = resultSet.getLong("id");
+                long id = resultSet.getLong("id");
                 Animal animalId = new AnimalDAO().findById(resultSet.getLong("animal_id"));
                 Veterinarian veterinarian = new VeterinarianDAO().findById(resultSet.getLong("veterinario_id"));
                 LocalDateTime dataHora = resultSet.getTimestamp("data_hora").toLocalDateTime();
                 String diag = resultSet.getString("diagnostico");
                 BigDecimal value = resultSet.getBigDecimal("valor");
-                list.add(new Consultation(id1, animalId, veterinarian, dataHora, diag,value));
+                list.add(new Consultation(id, animalId, veterinarian, dataHora, diag,value));
             }
         }catch (SQLException e){
             throw new SQLException(e.getMessage());

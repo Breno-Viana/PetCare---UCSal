@@ -226,20 +226,24 @@ public class MainViewController {
     @FXML
     void loadOwnerArea(Event event) throws IOException {
         R.animateBtn(ownBtn);
-        var stage = (Stage) vetBtn.getScene().getWindow();
+        var stage = (Stage) ownBtn.getScene().getWindow();
 
         double width = stage.getWidth();
         double height = stage.getHeight();
+        double minHeight = stage.getMinHeight();
+        double minWidth = stage.getMinWidth();
         double y = stage.getY();
         double x = stage.getX();
 
-        FXMLLoader loader = new FXMLLoader(R.veterinarian_view);
+        FXMLLoader loader = new FXMLLoader(R.owner_view);
         boolean maximized = stage.isMaximized();
 
         if (maximized){
             stage.setMaximized(true);
         }else {
-            stage.setMinWidth(width);
+            stage.setMinHeight(minHeight);
+            stage.setMinWidth(minWidth);
+            stage.setWidth(width);
             stage.setHeight(height);
             stage.setX(x);
             stage.setY(y);
@@ -248,8 +252,32 @@ public class MainViewController {
     }
 
     @FXML
-    void loadVeterinariaArea(Event event) {
+    void loadVeterinariaArea(Event event) throws IOException {
         R.animateBtn(vetBtn);
+        var stage = (Stage) vetBtn.getScene().getWindow();
+
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        double y = stage.getY();
+        double x = stage.getX();
+        double minHeight = stage.getMinHeight();
+        double minWidth = stage.getMinWidth();
+
+        FXMLLoader loader = new FXMLLoader(R.veterinarian_view);
+        boolean maximized = stage.isMaximized();
+
+        if (maximized){
+            stage.setMaximized(true);
+        }else {
+            stage.setMinHeight(minHeight);
+            stage.setMinWidth(minWidth);
+            stage.setWidth(width);
+            stage.setHeight(height);
+            stage.setX(x);
+            stage.setY(y);
+        }
+        stage.setScene(new Scene(loader.load()));
+
     }
 
     @FXML

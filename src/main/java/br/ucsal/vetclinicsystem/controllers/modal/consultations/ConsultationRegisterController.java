@@ -51,7 +51,7 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
         vetChoice.setValue(null);
         vetChoice.setConverter(new javafx.util.StringConverter<Veterinarian>() {
             public String toString(Veterinarian vet) {
-                return vet == null ? "Selecione um veterinário" : vet.getName();
+                return vet == null ? "Selecione um veterinário" : String.format("%s | %s", vet.getName(), vet.getSpeciality());
             }
             public Veterinarian fromString(String s) {
                 return null;

@@ -17,17 +17,22 @@ public class R {
     public static final URL principal_font;
     public static final URL consult_add_view;
     public static final URL consult_edit_view;
-    public static final URL veterinarian_view;
+    public static final URL owner_view;
     public static final  URL edit_owner_view;
+    public static final URL veterinarian_view;
+
+    public static final URL veterinarian_edit_view;
 
     static {
+        veterinarian_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_vet_view.fxml"));
+        veterinarian_view = Objects.requireNonNull(AppMain.class).getResource("views/veterinarian_view.fxml");
         edit_owner_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_owner_view.fxml"));
         principal_font = Objects.requireNonNull(AppMain.class.getResource("fonts/principal_bold.otf"));
         logo = new Image((Objects.requireNonNull(AppMain.class.getResource("img/petcare-logo.png")).toExternalForm()));
         main_view = Objects.requireNonNull(AppMain.class.getResource("views/main.fxml"));
         consult_add_view = Objects.requireNonNull(AppMain.class.getResource("views/add_consultation_view.fxml"));
         consult_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_consultation_view.fxml"));
-        veterinarian_view = Objects.requireNonNull(AppMain.class.getResource("views/owner_view.fxml"));
+        owner_view = Objects.requireNonNull(AppMain.class.getResource("views/owner_view.fxml"));
     }
     public static final String CSS_DELETE_BTN =
             "-fx-background-color: #e74c3c;" +
