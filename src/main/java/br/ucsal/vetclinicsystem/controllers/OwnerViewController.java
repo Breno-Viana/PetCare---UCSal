@@ -53,7 +53,7 @@ public class OwnerViewController extends OwnerCommonAttributes {
     private final String[] cosumedString = {
             "id",
             "name",
-            "cpf",
+            "formatedCpf",
             "email",
             "formatedPhone",
             "state",

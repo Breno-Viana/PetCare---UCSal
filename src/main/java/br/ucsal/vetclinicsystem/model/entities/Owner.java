@@ -68,4 +68,9 @@ public class Owner {
     public String getNum(){
         return num;
     }
+
+    public String getFormatedCpf(){
+        String formated = cpf;
+        return formated.replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
 }

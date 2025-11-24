@@ -137,14 +137,14 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                    <TextField fx:id="cpfInput" maxWidth="250.0" promptText="CPF" style="-fx-background-color: transparent; -fx-border-width: 0 0 2.2 0; -fx-border-color: #28487a;" GridPane.rowIndex="1">
+                    <TextField fx:id="cpfInput" maxWidth="250.0" promptText="Ex.:xxxxxxxxxxx" style="-fx-background-color: transparent; -fx-border-width: 0 0 2.2 0; -fx-border-color: #28487a;" GridPane.rowIndex="1">
                   <GridPane.margin>
                      <Insets left="10.0" />
                   </GridPane.margin>
                   <font>
                      <Font size="16.0" />
                   </font></TextField>
-                    <Label text="Cpf:" textFill="#28487a" underline="true" GridPane.valignment="BOTTOM">
+                    <Label text="Cpf(somente números):" textFill="#28487a" underline="true" GridPane.valignment="BOTTOM">
                         <font>
                             <Font size="22.0" />
                         </font>
