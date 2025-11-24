@@ -55,7 +55,7 @@ public class OwnerViewController extends OwnerCommonAttributes {
             "name",
             "cpf",
             "email",
-            "phone",
+            "formatedPhone",
             "state",
             "city",
             "street",

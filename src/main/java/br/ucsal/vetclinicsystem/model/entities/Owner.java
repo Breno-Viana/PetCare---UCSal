@@ -43,6 +43,10 @@ public class Owner {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+    public String getFormatedPhone(){
+        String formated = phone.replaceAll("\\D", "");
+        return formated.replaceFirst("(\\d{2})(\\d{5})(\\d{4})", "($1)$2-$3");
+    }
 
     public void setAddress(Address address) {
         this.address = address;
