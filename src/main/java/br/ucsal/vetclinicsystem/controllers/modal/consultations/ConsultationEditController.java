@@ -2,8 +2,10 @@ package br.ucsal.vetclinicsystem.controllers.modal.consultations;
 
 import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
+import br.ucsal.vetclinicsystem.model.dao.OwnerDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
+import br.ucsal.vetclinicsystem.model.entities.Owner;
 import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
@@ -13,10 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
@@ -70,39 +69,24 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
     private void setStylesAndFonts() throws IOException {
         Font font = Font.loadFont(R.principal_font.openStream(), 42);
         Font font_20 = Font.loadFont(R.principal_font.openStream(), 20);
-        Font font_16 = Font.loadFont(R.principal_font.openStream(), 16);
         editLabel.setFont(font);
         deleteBtn.setFont(font_20);
         deleteBtn.getStyleClass().add("delete-btn");
         deleteBtn.setStyle(R.CSS_DELETE_BTN);
-        dateLbl.setFont(font_16);
-        valueLbl.setFont(font_16);
-        diagLbl.setFont(font_16);
-        vetLbl.setFont(font_16);
-        aniLbl.setFont(font_16);
-        hourLbl.setFont(font_16);
-        animaiChoice.setStyle(R.CSS_CHOICEBOX);
         vetChoice.setStyle(R.CSS_CHOICEBOX);
         hour.setStyle(R.CSS_CHOICEBOX);
         updateBtn.setStyle(R.CSS_BEFORE_ANIMATE);
         updateBtn.setFont(font_20);
+       searchOwner.setStyle(R.CSS_BEFORE_ANIMATE);
     }
 
 
     private void search() {
         initChoiceBox();
         Consultation consultToEdit = dao.findById(id);
+        setAnimal(consultToEdit.getAnimalO());
         vetChoice.setValue(consultToEdit.getVetO());
-        animaiChoice.setValue(consultToEdit.getAnimalO());
-        animaiChoice.setConverter(new StringConverter<Animal>() {
-            public String toString(Animal animal) {
-                return animal == null ? "Animal para Consulta" : String.format("%s | %s", animal.getName(), animal.getOwner());
-            }
 
-            public Animal fromString(String s) {
-                return null;
-            }
-        });
         vetChoice.setConverter(new StringConverter<Veterinarian>() {
 
             @Override
@@ -121,6 +105,7 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
         hour.setValue(localTime.toString());
         diagText.setText(consultToEdit.getDiagnosis());
         valueText.setText(consultToEdit.getValue().toString());
+        ownerCpf.setText(String.format("%s | %s", animal.getName(), animal.getSpecies()));
 
     }
 
@@ -186,7 +171,6 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
 
     private void initChoiceBox() {
         vetChoice.setItems(veterinarians);
-        animaiChoice.setItems(animals);
         hour.setItems(FXCollections.observableList(List.of(hours)));
     }
 
@@ -195,12 +179,12 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
         R.animateBtn(updateBtn);
         LocalTime time = LocalTime.parse(hour.getValue());
         LocalDate date = datePick.getValue();
-        if (!validate(animaiChoice.getValue(),vetChoice.getValue(),valueText.getText(),diagText.getText(), datePick.getValue(),hour.getValue())){
+        if (!validate(animal,vetChoice.getValue(),valueText.getText(),diagText.getText(), datePick.getValue(),hour.getValue())){
             return;
         }
         LocalDateTime dateTime = LocalDateTime.of(date, time);
         String replace = valueText.getText().replace(",", ".");
-        Consultation consultation = new Consultation(id, animaiChoice.getValue(), vetChoice.getValue(), dateTime, diagText.getText(), new BigDecimal(replace));
+        Consultation consultation = new Consultation(id,animal, vetChoice.getValue(), dateTime, diagText.getText(), new BigDecimal(replace));
 
         Alert updating = new Alert(Alert.AlertType.CONFIRMATION);
         updating.setTitle("ATUALIZAR CONSULTA");
@@ -219,5 +203,59 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
             closed = true;
         }
 
+    }
+    @FXML
+    protected void searchOwner(Event event) throws SQLException, IOException {
+        R.animateBtn(searchOwner);
+        String ownerCpfText = ownerCpf.getText();
+        if (!validate(ownerCpfText)){
+            warning("DIGITE UM CPF VALIDO E CADASTRADO");
+            return;
+        }
+
+        List<Animal> animals = animalDAO.findByOwnerCpf(ownerCpfText);
+        openAnimalChoice(animals);
+    }
+
+    private void openAnimalChoice(List<Animal> animals) throws IOException {
+        FXMLLoader loader = new FXMLLoader(R.animal_choice);
+        Parent parent = loader.load();
+
+        AnimalChoiceController controller = loader.getController();
+        controller.setAnimals(animals);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(parent));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.initOwner(pane.getScene().getWindow());
+        stage.showAndWait();
+
+        Animal selected = controller.getSelectedAnimal();
+        ownerCpf.setText(String.format("%s | %s", selected.getName(), selected.getSpecies()));
+        setAnimal(selected);
+    }
+
+
+    boolean validate(String cpf) throws SQLException {
+        if(cpf == null || cpf.isEmpty() || validEntry(cpf)){
+            return false;
+        }
+        OwnerDAO ownerDAO = new OwnerDAO();
+        List<Owner> byCpf = ownerDAO.findByCpf(cpf);
+        return !byCpf.isEmpty();
+    }
+    protected boolean validEntry(String text) {
+        String[] split = text.split("");
+        if (split.length == 11) {
+            for (String s : split) {
+                try {
+                    Integer.parseInt(s);
+                } catch (RuntimeException r) {
+                    return true;
+                }
+            }
+            return false;
+        } else return true;
     }
 }

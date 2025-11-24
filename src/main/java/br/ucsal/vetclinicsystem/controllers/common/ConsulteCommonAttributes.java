@@ -1,20 +1,29 @@
 package br.ucsal.vetclinicsystem.controllers.common;
 
+import br.ucsal.vetclinicsystem.controllers.modal.consultations.AnimalChoiceController;
 import br.ucsal.vetclinicsystem.model.dao.AnimalDAO;
+import br.ucsal.vetclinicsystem.model.dao.OwnerDAO;
 import br.ucsal.vetclinicsystem.model.dao.VeterinarianDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
+import br.ucsal.vetclinicsystem.model.entities.Owner;
 import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
+import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public abstract class ConsulteCommonAttributes {
     protected final String regex = "^(0|[1-9]\\d*)([.,]\\d{1,2})?$";
@@ -54,15 +63,24 @@ public abstract class ConsulteCommonAttributes {
     @FXML
     protected DatePicker datePick;
     @FXML
-    protected ChoiceBox<Animal> animaiChoice;
-    @FXML
     protected ChoiceBox<Veterinarian> vetChoice;
     @FXML
     protected TextField diagText;
     @FXML
     protected TextField valueText;
+    @FXML
+    protected TextField ownerCpf;
+    @FXML
+    protected Button searchOwner;
 
-    private void warning(String msg) {
+    protected Animal animal;
+
+    protected void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+    protected AnimalDAO animalDAO = new AnimalDAO();
+
+    protected void warning(String msg) {
         var warningAlert = new Alert(Alert.AlertType.WARNING);
         warningAlert.setResizable(false);
         warningAlert.setTitle("SOLICITAÇÃO INVÁLIDA");
@@ -99,4 +117,5 @@ public abstract class ConsulteCommonAttributes {
 
         return true;
     }
+
 }

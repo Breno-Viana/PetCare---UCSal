@@ -210,4 +210,5 @@ public class VeterinarianViewController extends VeterinarianCommonAttributes {
         specialityChoice.getSelectionModel().clearSelection();
 
     }
+
 }

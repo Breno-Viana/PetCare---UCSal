@@ -26,6 +26,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class MainViewController {
@@ -182,8 +183,14 @@ public class MainViewController {
         var ev = (KeyEvent) event;
         if (ev.getCode() == KeyCode.ENTER) {
             if (validEntry()) {
-                list = FXCollections.observableList(consultationDAO.findByOwnerCpf(searchArea.getText()));
-                loadColumns();
+                List<Consultation> byOwnerCpf = consultationDAO.findByOwnerCpf(searchArea.getText());
+                if (byOwnerCpf.isEmpty()) {
+                    list = FXCollections.observableList(consultationDAO.findAll());
+                    loadColumns();
+                }else  {
+                    list = FXCollections.observableList(byOwnerCpf);
+                    loadColumns();
+                }
             } else {
                 list = FXCollections.observableList(consultationDAO.findAll());
                 loadColumns();
@@ -238,9 +245,9 @@ public class MainViewController {
         FXMLLoader loader = new FXMLLoader(R.owner_view);
         boolean maximized = stage.isMaximized();
 
-        if (maximized){
+        if (maximized) {
             stage.setMaximized(true);
-        }else {
+        } else {
             stage.setMinHeight(minHeight);
             stage.setMinWidth(minWidth);
             stage.setWidth(width);
@@ -266,9 +273,9 @@ public class MainViewController {
         FXMLLoader loader = new FXMLLoader(R.veterinarian_view);
         boolean maximized = stage.isMaximized();
 
-        if (maximized){
+        if (maximized) {
             stage.setMaximized(true);
-        }else {
+        } else {
             stage.setMinHeight(minHeight);
             stage.setMinWidth(minWidth);
             stage.setWidth(width);
@@ -281,8 +288,31 @@ public class MainViewController {
     }
 
     @FXML
-    void loadAnimalArea(Event event) {
+    void loadAnimalArea(Event event) throws IOException {
         R.animateBtn(aniBtn);
+        var stage = (Stage) aniBtn.getScene().getWindow();
+
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        double y = stage.getY();
+        double x = stage.getX();
+        double minHeight = stage.getMinHeight();
+        double minWidth = stage.getMinWidth();
+
+        FXMLLoader loader = new FXMLLoader(R.animal_view);
+        boolean maximized = stage.isMaximized();
+
+        if (maximized) {
+            stage.setMaximized(true);
+        } else {
+            stage.setMinHeight(minHeight);
+            stage.setMinWidth(minWidth);
+            stage.setWidth(width);
+            stage.setHeight(height);
+            stage.setX(x);
+            stage.setY(y);
+        }
+        stage.setScene(new Scene(loader.load()));
     }
 
 

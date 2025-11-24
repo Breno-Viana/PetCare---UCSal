@@ -219,8 +219,14 @@ public class OwnerViewController extends OwnerCommonAttributes {
         var search = textSearch.getText();
         if (keyEvent.getCode() == KeyCode.ENTER) {
             if (!validEntry(search)){
-                owners = FXCollections.observableList(dao.findByCpf(search));
+                List<Owner> byCpf = dao.findByCpf(search);
+                if (byCpf.isEmpty()){
+                owners = FXCollections.observableList(byCpf);
                 loadColumns();
+                }else {
+                    owners = FXCollections.observableList(byCpf);
+                    loadColumns();
+                }
             }else {
                 owners = FXCollections.observableList(dao.findAll());
                 loadColumns();

@@ -32,7 +32,7 @@
          <Font size="20.0" />
       </font>
    </Button>
-   <DatePicker fx:id="datePick" layoutX="613.0" layoutY="368.0" prefHeight="34.0" prefWidth="242.0" />
+   <DatePicker fx:id="datePick" layoutX="613.0" layoutY="368.0" prefHeight="34.0" prefWidth="242.0" promptText="Dana da Consulta" />
    <Label fx:id="diagLbl" layoutX="614.0" layoutY="132.0" prefHeight="34.0" prefWidth="191.0" text="Novo Diagnostico" textFill="#28487a">
       <font>
          <Font size="16.0" />
@@ -48,15 +48,14 @@
          <Font size="16.0" />
       </font>
    </Label>
-   <ChoiceBox fx:id="animaiChoice" layoutX="204.0" layoutY="166.0" prefHeight="43.0" prefWidth="250.0" />
-   <ChoiceBox fx:id="vetChoice" layoutX="204.0" layoutY="263.0" prefHeight="43.0" prefWidth="250.0" />
+   <ChoiceBox fx:id="vetChoice" layoutX="204.0" layoutY="166.0" prefHeight="43.0" prefWidth="250.0" />
    <ChoiceBox fx:id="hour" layoutX="204.0" layoutY="373.0" prefHeight="34.0" prefWidth="250.0" />
-   <Label fx:id="aniLbl" layoutX="204.0" layoutY="132.0" prefHeight="34.0" prefWidth="191.0" text="Novo Animal" textFill="#28487a">
+   <Label fx:id="aniLbl" layoutX="204.0" layoutY="234.0" prefHeight="34.0" prefWidth="191.0" text="Novo Animal" textFill="#28487a">
       <font>
          <Font size="16.0" />
       </font>
    </Label>
-   <Label fx:id="vetLbl" layoutX="204.0" layoutY="229.0" prefHeight="34.0" prefWidth="191.0" text="Novo Veterinario" textFill="#28487a">
+   <Label fx:id="vetLbl" layoutX="204.0" layoutY="132.0" prefHeight="34.0" prefWidth="191.0" text="Novo Veterinario" textFill="#28487a">
       <font>
          <Font size="16.0" />
       </font>
@@ -71,4 +70,6 @@
          <Font size="20.0" />
       </font>
    </Button>
+   <TextField fx:id="ownerCpf" layoutX="204.0" layoutY="263.0" prefHeight="43.0" prefWidth="250.0" promptText="CPF do DONO" />
+   <Button fx:id="searchOwner" onAction="#searchOwner" layoutX="395.0" layoutY="233.0" mnemonicParsing="false" text="Buscar" />
 </AnchorPane>

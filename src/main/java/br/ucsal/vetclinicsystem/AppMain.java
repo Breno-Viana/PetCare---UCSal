@@ -1,11 +1,14 @@
 package br.ucsal.vetclinicsystem;
 
+import br.ucsal.vetclinicsystem.config.PostgresConnectionConfig;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 
 public class AppMain extends Application {
@@ -22,6 +25,15 @@ public class AppMain extends Application {
         principal_stage.setMinHeight(900);
         principal_stage.setMaximized(true);
         principal_stage.show();
+
+        principal_stage.setOnCloseRequest(event ->{
+            try {
+                PostgresConnectionConfig.getConnectionInstance().close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            principal_stage.close();
+        });
     }
 
 

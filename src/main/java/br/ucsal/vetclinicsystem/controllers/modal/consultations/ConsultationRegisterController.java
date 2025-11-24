@@ -2,8 +2,10 @@ package br.ucsal.vetclinicsystem.controllers.modal.consultations;
 
 import br.ucsal.vetclinicsystem.controllers.common.ConsulteCommonAttributes;
 import br.ucsal.vetclinicsystem.model.dao.ConsultationDAO;
+import br.ucsal.vetclinicsystem.model.dao.OwnerDAO;
 import br.ucsal.vetclinicsystem.model.entities.Animal;
 import br.ucsal.vetclinicsystem.model.entities.Consultation;
+import br.ucsal.vetclinicsystem.model.entities.Owner;
 import br.ucsal.vetclinicsystem.model.entities.Veterinarian;
 import br.ucsal.vetclinicsystem.utils.R;
 import javafx.collections.FXCollections;
@@ -18,10 +20,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,16 +62,6 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
             }
         });
         vetChoice.setItems(veterinarians);
-        animaiChoice.setValue(null);
-        animaiChoice.setConverter(new StringConverter<Animal>() {
-            public String toString(Animal animal) {
-                return animal == null? "Animal para Consulta":String.format("%s | %s",animal.getName() ,animal.getOwner());
-            }
-            public Animal fromString(String s) {
-                return null;
-            }
-        });
-        animaiChoice.setItems(animals);
         hour.setValue(null);
         hour.setConverter(new StringConverter<String>() {
 
@@ -82,6 +76,7 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
             }
         });
         hour.setItems(FXCollections.observableList(List.of(hours)));
+
     }
 
     private void setStyles() throws IOException {
@@ -90,14 +85,16 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
         this.addBtn.setStyle(R.CSS_BEFORE_ANIMATE);
         this.cancelBtn.setStyle(R.CSS_BEFORE_ANIMATE);
         this.vetChoice.setStyle(R.CSS_CHOICEBOX);
-        this.animaiChoice.setStyle(R.CSS_CHOICEBOX);
         this.hour.setStyle(R.CSS_CHOICEBOX);
+        this.searchOwner.setStyle(R.CSS_BEFORE_ANIMATE);
     }
 
     @FXML
-    void add(Event event){
+    void add(Event event) throws SQLException, IOException {
         R.animateBtn(addBtn);
-        Animal animal = animaiChoice.getValue();
+        if (this.animal == null) {
+            searchOwner(null);
+        }
         Veterinarian vet = vetChoice.getValue();
         String text = valueText.getText();
         String text1 = diagText.getText();
@@ -146,4 +143,62 @@ public class ConsultationRegisterController extends ConsulteCommonAttributes {
             stage.close();
         }
     }
+
+
+    @FXML
+    protected void searchOwner(Event event) throws SQLException, IOException {
+        R.animateBtn(searchOwner);
+        String ownerCpfText = ownerCpf.getText();
+        if (!validate(ownerCpfText)){
+            warning("DIGITE UM CPF VALIDO E CADASTRADO");
+            return;
+        }
+
+        List<Animal> animals = animalDAO.findByOwnerCpf(ownerCpfText);
+        openAnimalChoice(animals);
+    }
+
+
+    void openAnimalChoice(List<Animal> animals) throws IOException {
+        FXMLLoader loader = new FXMLLoader(R.animal_choice);
+        Parent parent = loader.load();
+
+        AnimalChoiceController controller = loader.getController();
+        controller.setAnimals(animals);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(parent));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.initOwner(pane.getScene().getWindow());
+        stage.showAndWait();
+
+        Animal selected = controller.getSelectedAnimal();
+        ownerCpf.setText(String.format("%s | %s", selected.getName(), selected.getSpecies()));
+        setAnimal(selected);
+
+    }
+    boolean validate(String cpf) throws SQLException {
+        if(cpf == null || cpf.isEmpty() || validEntry(cpf)){
+            return false;
+        }
+        OwnerDAO ownerDAO = new OwnerDAO();
+        List<Owner> byCpf = ownerDAO.findByCpf(cpf);
+        return !byCpf.isEmpty();
+    }
+    protected boolean validEntry(String text) {
+        String[] split = text.split("");
+        if (split.length == 11) {
+            for (String s : split) {
+                try {
+                    Integer.parseInt(s);
+                } catch (RuntimeException r) {
+                    return true;
+                }
+            }
+            return false;
+        } else return true;
+    }
+
+
 }

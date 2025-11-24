@@ -23,7 +23,16 @@ public class R {
 
     public static final URL veterinarian_edit_view;
 
+    public static final URL animal_view;
+    public static final URL animal_edit_view;
+
+    public static final URL animal_choice;
+
+
     static {
+        animal_choice = Objects.requireNonNull(AppMain.class.getResource("views/animal_choice.fxml"));
+        animal_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/animal_edit_view.fxml"));
+        animal_view = Objects.requireNonNull(AppMain.class.getResource("views/animal_view.fxml"));
         veterinarian_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_vet_view.fxml"));
         veterinarian_view = Objects.requireNonNull(AppMain.class).getResource("views/veterinarian_view.fxml");
         edit_owner_view = Objects.requireNonNull(AppMain.class.getResource("views/edit_owner_view.fxml"));
