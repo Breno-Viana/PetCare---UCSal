@@ -29,6 +29,7 @@ public class R {
     public static final URL animal_choice;
 
 
+
     static {
         animal_choice = Objects.requireNonNull(AppMain.class.getResource("views/animal_choice.fxml"));
         animal_edit_view = Objects.requireNonNull(AppMain.class.getResource("views/animal_edit_view.fxml"));

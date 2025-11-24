@@ -64,6 +64,7 @@ public class OwnerCommonAttributes {
         }
         if (phone == null || phone.isBlank() || validEntry(phone)) {
             warning("telefone inválido, insira SOMENTE os NÚMEROS");
+            return false;
         }
         if (state == null || state.isBlank()) {
             warning("estado inválido");
@@ -91,13 +92,14 @@ public class OwnerCommonAttributes {
         return num.matches("^[0-9]+$");
     }
 
-    protected void warning(String msg) {
+    protected boolean warning(String msg) {
         var warning = new Alert(Alert.AlertType.WARNING);
         warning.setTitle("Inserção Inválida");
         warning.setContentText(msg);
         warning.initModality(Modality.APPLICATION_MODAL);
         warning.initStyle(StageStyle.UNDECORATED);
-        warning.show();
+        warning.showAndWait();
+        return false;
     }
 
     protected boolean validEntry(String text) {
