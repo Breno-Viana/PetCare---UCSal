@@ -175,7 +175,7 @@ public class ConsultationEditController extends ConsulteCommonAttributes {
     }
 
     @FXML
-    public void updateConsultation(ActionEvent actionEvent) throws SQLException {
+    public void updateConsultation(ActionEvent actionEvent) throws SQLException{
         R.animateBtn(updateBtn);
         LocalTime time = LocalTime.parse(hour.getValue());
         LocalDate date = datePick.getValue();
